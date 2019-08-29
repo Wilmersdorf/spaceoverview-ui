@@ -3,7 +3,8 @@
     <div id="nav" style="text-align: center;">
       <router-link to="/">Home</router-link>&nbsp;|
       <router-link to="/space">Spaces</router-link>&nbsp;|
-      <router-link to="/property">Properties</router-link>
+      <router-link to="/property">Properties</router-link>&nbsp;|
+      <router-link to="/theorem">Theorems</router-link>
       <span v-if="canEdit">&nbsp;|&nbsp;</span>
       <router-link v-if="canEdit" to="/info">Info</router-link>
       <span v-if="isAdmin">&nbsp;|&nbsp;</span>
@@ -45,6 +46,7 @@ export default {
 <style>
 #app {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
+  /* font-family: "Open Sans", sans-serif; */
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #2c3e50;
@@ -74,4 +76,29 @@ a {
   z-index: 1030;
   text-align: center !important;
 }
+.pointer {
+  cursor: pointer;
+}
+.no-select {
+  -moz-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  -o-user-select: none;
+  user-select: none;
+}
+.is-flex {
+  display: flex !important;
+  justify-content: space-between !important;
+  align-items: center !important;
+}
+.checkbox {
+  width: 13px;
+  height: 13px;
+  padding: 0;
+  margin: 0;
+  vertical-align: bottom;
+  position: relative;
+  top: -6.5px;
+}
 </style>
+

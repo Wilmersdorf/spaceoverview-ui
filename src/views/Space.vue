@@ -8,6 +8,7 @@
         <li class="breadcrumb-item">
           <span v-if="loaded" v-show="rendered" id="spaceSymbolCrumb">{{space.symbol}}</span>
         </li>
+        <ShowSourceDropdown v-if="loaded" v-show="rendered"></ShowSourceDropdown>
       </ol>
     </nav>
     <div v-if="loaded" v-show="rendered">
@@ -17,14 +18,24 @@
         <div
           :id="formatFieldLinkHash(fieldLink)"
           class="font-weight-bold"
-          v-if="linkPropertyList.some(it=>it.link.field===fieldLink)"
+          v-if="linkPropertyList.some(it=>it.field===fieldLink)"
         >{{formatFieldLink(fieldLink)}}</div>
-        <div v-for="linkProperty in linkPropertyList" :key="linkProperty.link.id">
-          <div class="mt-2" v-if="linkProperty.link.field === fieldLink">
+        <div
+          v-for="linkProperty in linkPropertyList"
+          :key="`${fieldLink}-${linkProperty.property.id}`"
+        >
+          <div class="d-flex mt-2" v-if="linkProperty.field === fieldLink">
             <router-link
               :id="`${linkProperty.property.id}-name`"
               :to="`/space/${space.id}/property/${linkProperty.property.id}`"
             >{{linkProperty.property.name}}</router-link>
+            <div v-if="showSource" class="d-flex">
+              <div class="text-muted">&nbsp;(</div>
+              <span class="text-muted" v-if="linkProperty.linked">linked</span>
+              <span class="text-muted" v-if="linkProperty.linked && linkProperty.computed">,&nbsp;</span>
+              <span class="text-muted" v-if="linkProperty.computed">computed</span>
+              <div>)</div>
+            </div>
           </div>
         </div>
       </div>
@@ -40,6 +51,7 @@
 </template>
 <script>
 import SpaceInfo from "@/components/SpaceInfo.vue";
+import ShowSourceDropdown from "@/components/ShowSourceDropdown.vue";
 
 export default {
   data: function() {
@@ -79,7 +91,8 @@ export default {
       });
   },
   components: {
-    SpaceInfo
+    SpaceInfo,
+    ShowSourceDropdown
   }
 };
 </script>

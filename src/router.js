@@ -21,6 +21,11 @@ import EditLink from './views/EditLink.vue';
 import DeleteLink from './views/DeleteLink.vue';
 import NotFound from './views/NotFound.vue';
 import jsCookie from 'js-cookie';
+import Theorems from './views/Theorems.vue';
+import AddTheorem from './views/AddTheorem.vue';
+import Theorem from './views/Theorem.vue';
+import EditTheorem from './views/EditTheorem.vue';
+import DeleteTheorem from './views/DeleteTheorem.vue';
 
 Vue.use(Router);
 
@@ -110,6 +115,29 @@ const router = new Router({
       path: '/property/:id/delete',
       component: DeleteProperty,
       name: 'delete property'
+    },
+    {
+      path: '/theorem',
+      component: Theorems
+    },
+    {
+      path: '/theorem/add',
+      component: AddTheorem,
+      name: 'add theorem'
+    },
+    {
+      path: '/theorem/:id',
+      component: Theorem
+    },
+    {
+      path: '/theorem/:id/edit',
+      component: EditTheorem,
+      name: 'edit theorem'
+    },
+    {
+      path: '/theorem/:id/delete',
+      component: DeleteTheorem,
+      name: 'delete theorem'
     },
     {
       path: '/not-found',

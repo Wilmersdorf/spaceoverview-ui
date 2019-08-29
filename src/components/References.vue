@@ -1,8 +1,13 @@
 <template>
   <div v-show="rendered">
     <div v-if="hasReferences">
-      <h6 class="mt-4 text-center">{{title}}</h6>
-      <div class="text-center mt-2" v-for="(reference,index) in references" :key="`${index}`">
+      <h6 class="mt-4" :class="center ? 'text-center' : ''">{{title}}</h6>
+      <div
+        class="mt-2"
+        :class="center ? 'text-center' : ''"
+        v-for="(reference,index) in references"
+        :key="`${index}`"
+      >
         <a
           class="d-inline"
           :id="`reference-${id}-${index}`"
@@ -21,7 +26,10 @@ export default {
   name: "References",
   props: {
     id: null,
-    references: Array
+    references: Array,
+    center: {
+      default: true
+    }
   },
   data: function() {
     return {

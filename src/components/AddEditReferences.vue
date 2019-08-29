@@ -101,6 +101,9 @@ export default {
     $("#deleteReferenceModal").on("hidden.bs.modal", function() {
       self.resetModals();
     });
+    for (let i = 0; i < this.references.length; i++) {
+      this.render(`reference-${i}`);
+    }
   },
   updated() {
     for (let i = 0; i < this.references.length; i++) {

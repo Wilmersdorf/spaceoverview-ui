@@ -12,6 +12,7 @@
     "bibtex-parse-js": "0.0.24",
     "bootstrap": "^4.3.1",
     "core-js": "^2.6.5",
+    "feather-icons": "^4.24.1",
     "jquery": "^3.4.1",
     "js-cookie": "^2.2.1",
     "katex": "^0.10.2",

@@ -72,9 +72,8 @@ export default {
     }
   },
   mounted() {
-    let id = this.$route.params.id;
     this.$http
-      .get(`/api/property/${id}`)
+      .get(`/api/property/${this.id}`)
       .then(response => {
         this.property = response.data;
         this.editProperty = { ...response.data };

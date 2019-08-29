@@ -8,8 +8,14 @@
     <h1 class="mt-3 text-center">Home</h1>
     <div
       class="mt-4"
-    >SpaceOverview.com is a website with an open source directory of Banach spaces and their properties.</div>
-    <div class="mt-2">This project aims to answer the following questions:</div>
+    >SpaceOverview.com is an open source project that makes it easier for students and researchers to find mathematical knowledge.</div>
+    <div class="mt-2 mb-2">
+      We currently list
+      <a
+        href="https://en.wikipedia.org/wiki/Banach_space"
+        target="_blank"
+      >Banach spaces</a> and their properties to answer the following questions:
+    </div>
     <ul>
       <li>Given a Banach space, which properties does this space have or lack?</li>
       <li>Given a property, which Banach spaces have or lack this property?</li>
@@ -21,7 +27,11 @@
       </li>
       <li>
         See a list of all
-        <router-link :to="`/space`">properties</router-link>
+        <router-link :to="`/property`">properties</router-link>
+      </li>
+      <li>
+        See a list of all
+        <router-link :to="`/theorem`">theorems</router-link>
       </li>
       <li>
         <span>Browse the source code on GitHub (</span>
@@ -38,11 +48,11 @@
       </li>
     </ul>
     <div>
-      This website is currrently in alpha status. Please write an email to info@spaceoverview.com if you're interested in contributing to the project, for example by
+      This website is currrently in alpha status. Please write an email to info@spaceoverview.com if you're interested in contributing to this project, for example by
       <ul>
         <li>Giving feedback</li>
         <li>Testing future versions</li>
-        <li>Adding spaces and properties</li>
+        <li>Adding spaces, properties and theorems</li>
       </ul>
     </div>
   </div>

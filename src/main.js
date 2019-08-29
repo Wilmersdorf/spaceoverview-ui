@@ -7,10 +7,14 @@ import axios from 'axios';
 import xml2js from 'xml2js';
 import bibtexParseJs from 'bibtex-parse-js';
 import jsCookie from 'js-cookie';
+import feather from 'feather-icons';
 
 var privileges = {
   isAdmin: jsCookie.get('isAdmin') === 'true',
   canEdit: jsCookie.get('canEdit') === 'true'
+};
+var settings = {
+  showSource: jsCookie.get('showSource') === 'true'
 };
 
 axios.interceptors.request.use(config => {
@@ -25,8 +29,7 @@ axios.interceptors.response.use(
   },
   function(error) {
     if (
-      (error.response.config.method === 'post' ||
-        error.response.config.method === 'delete') &&
+      (error.response.config.method === 'post' || error.response.config.method === 'delete') &&
       $.type(error.response.data) === 'string' &&
       error.response.data.startsWith('Proxy error')
     ) {
@@ -42,6 +45,7 @@ Vue.prototype.$http = axios;
 Vue.prototype.$xml = xml2js;
 Vue.prototype.$bibtex = bibtexParseJs;
 Vue.prototype.$jsCookie = jsCookie;
+Vue.prototype.$feather = feather;
 
 const FIELD_LINK = [
   'REAL',
@@ -54,9 +58,6 @@ const FIELD_LINK = [
   'NOT_REAL_AND_COMPLEX'
 ];
 
-window.$ = require('jquery');
-const $ = window.$;
-
 window.isEmpty = function(str) {
   return str === null || str === undefined || str.trim().length === 0;
 };
@@ -65,6 +66,7 @@ Vue.mixin({
   data: function() {
     return {
       privileges: privileges,
+      settings: settings,
       FIELD_LINK: FIELD_LINK
     };
   },
@@ -78,13 +80,21 @@ Vue.mixin({
       });
       return json;
     },
+    renderByClass: function(clazz, root = $(document)) {
+      if (typeof renderMathInElement === 'function') {
+        root.find('.' + clazz).each((index, element) => {
+          renderMathInElement(element, {
+            delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }]
+          });
+        });
+      } else {
+        setTimeout(() => this.renderByClass(clazz, root), 1);
+      }
+    },
     render: function(id) {
       if (typeof renderMathInElement === 'function') {
         renderMathInElement($('#' + id)[0], {
-          delimiters: [
-            { left: '$$', right: '$$', display: true },
-            { left: '$', right: '$', display: false }
-          ]
+          delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }]
         });
       } else {
         setTimeout(() => this.render(id), 1);
@@ -139,9 +149,19 @@ Vue.mixin({
         return 'Complex_and_not_real';
       }
     },
+    hasProperty: function(field) {
+      if (field === 'REAL' || field === 'COMPLEX' || field === 'REAL_AND_COMPLEX') {
+        return true;
+      } else {
+        return false;
+      }
+    },
     updatePrivileges: function() {
       this.privileges.canEdit = this.$jsCookie.get('canEdit') === 'true';
       this.privileges.isAdmin = this.$jsCookie.get('isAdmin') === 'true';
+    },
+    updateSettings: function() {
+      this.settings.showSource = this.$jsCookie.get('showSource') === 'true';
     }
   },
   computed: {
@@ -150,6 +170,9 @@ Vue.mixin({
     },
     isAdmin: function() {
       return this.privileges.isAdmin;
+    },
+    showSource: function() {
+      return this.settings.showSource;
     }
   }
 });

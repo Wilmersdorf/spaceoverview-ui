@@ -14,7 +14,7 @@
       <div>
         Everything enclosed in dollar signs $ ... $ will be rendered in math mode. For example, $L^1$ will be rendered as
         <span
-          id="mathMode"
+          class="math"
         >$L^1$</span>.
         <br />A complete list, sorted into logical groups, can be found
         <a
@@ -146,7 +146,44 @@
           <span class="action">Delete</span> in the bottom menu.
         </li>
       </ol>
+      <h3 class="mt-4 text-center">Theorems</h3>
+      <h5>
+        <strong>How can I add a theorem?</strong>
+      </h5>
+      <ol class="pl-4">
+        <li>
+          Click on
+          <router-link :to="'/theorem'">Theorems</router-link>&nbsp;in the top menu.
+        </li>
+        <li>
+          Click on
+          <router-link :to="'/theorem/add'">Add theorem</router-link>&nbsp;in the bottom menu.
+        </li>
+      </ol>
+      <h5>
+        <strong>How can I edit or delete a theorem?</strong>
+      </h5>
+      <ol class="pl-4">
+        <li>
+          Click on
+          <router-link :to="'/theorem'">Theorems</router-link>&nbsp; in the top menu.
+        </li>
+        <li>
+          Click on the arrow
+          <span class="math">$\Longrightarrow$</span> of the theorem you would like to edit or delete.
+        </li>
+        <li>
+          Click on
+          <span class="action">Edit</span> or
+          <span class="action">Delete</span> in the bottom menu.
+        </li>
+      </ol>
+      <h5>
+        <strong>How are properties computed from theorems?</strong>
+      </h5>
+      <div>Currently, only linked properties are used to compute properties from theorems.</div>
     </div>
+    <div class="mt-4"></div>
   </div>
 </template>
 
@@ -159,7 +196,7 @@ export default {
   },
   mounted() {
     this.$nextTick(() => {
-      this.render("mathMode");
+      this.renderByClass("math");
       this.rendered = true;
     });
   }
