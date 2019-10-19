@@ -19,7 +19,7 @@
         :class="{ 'is-invalid': errors['symbol'] }"
         v-on:input="inputSymbol"
       />
-      <div class="invalid-feedback">{{errors["symbol"]}}</div>
+      <div class="invalid-feedback">{{ errors['symbol'] }}</div>
     </div>
     <span id="mathSymbol"></span>
     <div class="form-group mt-4">
@@ -33,7 +33,7 @@
         :class="{ 'is-invalid': errors['norm'] }"
         v-on:input="inputNorm"
       />
-      <div class="invalid-feedback">{{errors["norm"]}}</div>
+      <div class="invalid-feedback">{{ errors['norm'] }}</div>
     </div>
     <div id="mathNorm"></div>
     <div class="form-group mt-4">
@@ -47,7 +47,7 @@
         :class="{ 'is-invalid': errors['description'] }"
         v-on:input="inputDescription"
       />
-      <div class="invalid-feedback">{{errors["description"]}}</div>
+      <div class="invalid-feedback">{{ errors['description'] }}</div>
     </div>
     <div id="mathDescription"></div>
     <div class="form-group mt-4">
@@ -63,42 +63,42 @@
 
 <script>
 export default {
-  name: "AddEditSpaceForm",
+  name: 'AddEditSpaceForm',
   props: {
     space: {
       required: true
     },
     errors: {}
   },
-  data: function() {
+  data() {
     return {
       rendered: false
-    };
-  },
-  methods: {
-    inputSymbol: function(event) {
-      $("#mathSymbol").text(event.target.value);
-      this.render("mathSymbol");
-    },
-    inputDescription: function(event) {
-      $("#mathDescription").text(event.target.value);
-      this.render("mathDescription");
-    },
-    inputNorm: function(event) {
-      $("#mathNorm").text(event.target.value);
-      this.render("mathNorm");
     }
   },
-  mounted: function() {
-    $("#mathSymbol").text(this.space.symbol);
-    $("#mathNorm").text(this.space.norm);
-    $("#mathDescription").text(this.space.description);
+  methods: {
+    inputSymbol(event) {
+      $('#mathSymbol').text(event.target.value)
+      this.render('mathSymbol')
+    },
+    inputDescription(event) {
+      $('#mathDescription').text(event.target.value)
+      this.render('mathDescription')
+    },
+    inputNorm(event) {
+      $('#mathNorm').text(event.target.value)
+      this.render('mathNorm')
+    }
+  },
+  mounted() {
+    $('#mathSymbol').text(this.space.symbol)
+    $('#mathNorm').text(this.space.norm)
+    $('#mathDescription').text(this.space.description)
     this.$nextTick(() => {
-      this.render("mathSymbol");
-      this.render("mathNorm");
-      this.render("mathDescription");
-      this.rendered = true;
-    });
+      this.render('mathSymbol')
+      this.render('mathNorm')
+      this.render('mathDescription')
+      this.rendered = true
+    })
   }
-};
+}
 </script>

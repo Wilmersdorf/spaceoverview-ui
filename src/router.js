@@ -1,33 +1,49 @@
-import Vue from 'vue';
-import Router from 'vue-router';
-import Home from './views/Home.vue';
-import Info from './views/Info.vue';
-import Admin from './views/Admin.vue';
-import Spaces from './views/Spaces.vue';
-import Space from './views/Space.vue';
-import AddSpace from './views/AddSpace.vue';
-import EditSpace from './views/EditSpace.vue';
-import DeleteSpace from './views/DeleteSpace.vue';
-import Properties from './views/Properties.vue';
-import Property from './views/Property.vue';
-import AddProperty from './views/AddProperty.vue';
-import EditProperty from './views/EditProperty.vue';
-import DeleteProperty from './views/DeleteProperty.vue';
-import SelectLink from './views/SelectLink.vue';
-import AddLink from './views/AddLink.vue';
-import SpacePropertyLink from './views/SpacePropertyLink.vue';
-import PropertySpaceLink from './views/PropertySpaceLink.vue';
-import EditLink from './views/EditLink.vue';
-import DeleteLink from './views/DeleteLink.vue';
-import NotFound from './views/NotFound.vue';
-import jsCookie from 'js-cookie';
-import Theorems from './views/Theorems.vue';
-import AddTheorem from './views/AddTheorem.vue';
-import Theorem from './views/Theorem.vue';
-import EditTheorem from './views/EditTheorem.vue';
-import DeleteTheorem from './views/DeleteTheorem.vue';
+import Vue from 'vue'
+import Router from 'vue-router'
+import jsCookie from 'js-cookie'
+import Home from './views/Home.vue'
+import Info from './views/Info.vue'
+import Admin from './views/Admin.vue'
+import Spaces from './views/space/Spaces.vue'
+import Space from './views/space/Space.vue'
+import AddSpace from './views/space/AddSpace.vue'
+import EditSpace from './views/space/EditSpace.vue'
+import DeleteSpace from './views/space/DeleteSpace.vue'
+import Properties from './views/space/Properties.vue'
+import Property from './views/space/Property.vue'
+import AddProperty from './views/space/AddProperty.vue'
+import EditProperty from './views/space/EditProperty.vue'
+import DeleteProperty from './views/space/DeleteProperty.vue'
+import SelectLink from './views/space/SelectLink.vue'
+import AddLink from './views/space/AddLink.vue'
+import SpacePropertyLink from './views/space/SpacePropertyLink.vue'
+import PropertySpaceLink from './views/space/PropertySpaceLink.vue'
+import EditLink from './views/space/EditLink.vue'
+import DeleteLink from './views/space/DeleteLink.vue'
+import NotFound from './views/NotFound.vue'
+import Theorems from './views/space/Theorems.vue'
+import AddTheorem from './views/space/AddTheorem.vue'
+import Theorem from './views/space/Theorem.vue'
+import EditTheorem from './views/space/EditTheorem.vue'
+import DeleteTheorem from './views/space/DeleteTheorem.vue'
+import DifferentialEquations from './views/differentialEquation/DifferentialEquations.vue'
+import AddDifferentialEquation from './views/differentialEquation/AddDifferentialEquation.vue'
+import EditDifferentialEquation from './views/differentialEquation/EditDifferentialEquation.vue'
+import DeleteDifferentialEquation from './views/differentialEquation/DeleteDifferentialEquation.vue'
+import DifferentialEquation from './views/differentialEquation/DifferentialEquation.vue'
+import DifferentialEquationProperties from './views/differentialEquation/DifferentialEquationProperties.vue'
+import AddDifferentialEquationProperty from './views/differentialEquation/AddDifferentialEquationProperty.vue'
+import EditDifferentialEquationProperty from './views/differentialEquation/EditDifferentialEquationProperty.vue'
+import DeleteDifferentialEquationProperty from './views/differentialEquation/DeleteDifferentialEquationProperty.vue'
+import DifferentialEquationProperty from './views/differentialEquation/DifferentialEquationProperty.vue'
+import SelectDifferentialEquationLink from './views/differentialEquation/SelectDifferentialEquationLink.vue'
+import AddDifferentialEquationLink from './views/differentialEquation/AddDifferentialEquationLink.vue'
+import DifferentialEquationLink from './views/differentialEquation/DifferentialEquationLink.vue'
+import DifferentialEquationPropertyLink from './views/differentialEquation/DifferentialEquationPropertyLink.vue'
+import EditDifferentialEquationLink from './views/differentialEquation/EditDifferentialEquationLink.vue'
+import DeleteDifferentialEquationLink from './views/differentialEquation/DeleteDifferentialEquationLink.vue'
 
-Vue.use(Router);
+Vue.use(Router)
 
 const router = new Router({
   mode: 'history',
@@ -140,23 +156,98 @@ const router = new Router({
       name: 'delete theorem'
     },
     {
+      path: '/differential-equation/property',
+      component: DifferentialEquationProperties
+    },
+    {
+      path: '/differential-equation/property/add',
+      component: AddDifferentialEquationProperty,
+      name: 'add differential equation property'
+    },
+    {
+      path:
+        '/differential-equation/property/:propertyId/differential-equation/:differentialEquationId',
+      component: DifferentialEquationPropertyLink
+    },
+    {
+      path: '/differential-equation/property/:id',
+      component: DifferentialEquationProperty
+    },
+    {
+      path: '/differential-equation/:id/property/add',
+      component: SelectDifferentialEquationLink,
+      name: 'select differential equation link'
+    },
+    {
+      path: '/differential-equation/:differentialEquationId/property/:propertyId',
+      component: DifferentialEquationLink
+    },
+    {
+      path: '/differential-equation/:differentialEquationId/property/:propertyId/add',
+      component: AddDifferentialEquationLink,
+      name: 'add differential equation link'
+    },
+    {
+      path: '/differential-equation/:differentialEquationId/property/:propertyId/edit',
+      component: EditDifferentialEquationLink,
+      name: 'edit differential equation link'
+    },
+    {
+      path: '/differential-equation/:differentialEquationId/property/:propertyId/delete',
+      component: DeleteDifferentialEquationLink,
+      name: 'delete differential equation link'
+    },
+    {
+      path: '/differential-equation/property/:id/edit',
+      component: EditDifferentialEquationProperty,
+      name: 'edit differential equation property'
+    },
+    {
+      path: '/differential-equation/property/:id/delete',
+      component: DeleteDifferentialEquationProperty,
+      name: 'delete differential equation property'
+    },
+    {
+      path: '/differential-equation',
+      component: DifferentialEquations
+    },
+    {
+      path: '/differential-equation/add',
+      component: AddDifferentialEquation,
+      name: 'add differential equation'
+    },
+    {
+      path: '/differential-equation/:id',
+      component: DifferentialEquation
+    },
+    {
+      path: '/differential-equation/:id/edit',
+      component: EditDifferentialEquation,
+      name: 'edit differential equation'
+    },
+    {
+      path: '/differential-equation/:id/delete',
+      component: DeleteDifferentialEquation,
+      name: 'delete differential equation'
+    },
+    {
       path: '/not-found',
       component: NotFound,
       name: '404'
     },
     { path: '*', redirect: '/not-found' }
   ]
-});
+})
 
 router.beforeEach((to, from, next) => {
-  let isAdmin = router.app.isAdmin || jsCookie.get('isAdmin') === 'true';
-  let canEdit = router.app.canEdit || jsCookie.get('canEdit') === 'true';
-  let name = to.name;
+  const isAdmin = router.app.isAdmin || jsCookie.get('isAdmin') === 'true'
+  const canEdit = router.app.canEdit || jsCookie.get('canEdit') === 'true'
+  const { name } = to
   if (to.path === '/admin') {
     if (!isAdmin) {
-      next({ name: '404' });
+      next({ name: '404' })
     } else {
-      next();
+      next()
     }
   } else if (
     name !== undefined &&
@@ -167,10 +258,10 @@ router.beforeEach((to, from, next) => {
       name === 'info') &&
     !canEdit
   ) {
-    next({ name: '404' });
+    next({ name: '404' })
   } else {
-    next();
+    next()
   }
-});
+})
 
-export default router;
+export default router

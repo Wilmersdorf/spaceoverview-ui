@@ -25,7 +25,7 @@
                 placeholder="Your email"
                 :class="{ 'is-invalid': errors['email'] }"
               />
-              <div class="invalid-feedback">{{errors["email"]}}</div>
+              <div class="invalid-feedback">{{ errors['email'] }}</div>
             </div>
             <div class="form-group mt-4">
               <label for="password">Password</label>
@@ -36,7 +36,7 @@
                 placeholder="Password for login"
                 :class="{ 'is-invalid': errors['password'] }"
               />
-              <div class="invalid-feedback">{{errors["password"]}}</div>
+              <div class="invalid-feedback">{{ errors['password'] }}</div>
             </div>
             <div class="form-group mt-4">
               <label for="inviteCode">Invite code</label>
@@ -46,7 +46,7 @@
                 placeholder="Invite code"
                 :class="{ 'is-invalid': errors['inviteCode'] }"
               />
-              <div class="invalid-feedback">{{errors["inviteCode"]}}</div>
+              <div class="invalid-feedback">{{ errors['inviteCode'] }}</div>
             </div>
             <div class="form-check mt-4">
               <input
@@ -57,16 +57,18 @@
                 value="true"
                 :class="{ 'is-invalid': errors['license'] }"
               />
-              <label
-                class="form-check-label"
-                for="license"
-              >I agree that my contributions can be published under a yet to be determined open source license.</label>
-              <div class="invalid-feedback">{{errors["license"]}}</div>
+              <label class="form-check-label" for="license"
+                >I agree that my contributions can be published under one or more yet to be
+                determined open source licenses.</label
+              >
+              <div class="invalid-feedback">{{ errors['license'] }}</div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button @click="submitSignup" type="button" class="btn btn-primary mr-auto">Sign up</button>
+          <button @click="submitSignup" type="button" class="btn btn-primary mr-auto">
+            Sign up
+          </button>
           <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
         </div>
       </div>
@@ -76,42 +78,41 @@
 
 <script>
 export default {
-  name: "SignupModal",
-  data: function() {
+  name: 'SignupModal',
+  data() {
     return {
       errors: {}
-    };
+    }
   },
   methods: {
-    submitSignup: function() {
-      if (this.$jsCookie.get("csrf") === undefined) {
-        this.$http.get("/api/space").then(() => {
-          this.signup();
-        });
+    submitSignup() {
+      if (this.$jsCookie.get('csrf') === undefined) {
+        this.$http.get('/api/space').then(() => {
+          this.signup()
+        })
       } else {
-        this.signup();
+        this.signup()
       }
     },
-    signup: function() {
-      let form = $("#signupForm");
-      let json = this.convertFormToJson(form);
-      this.errors = {};
+    signup() {
+      const json = this.convertFormToJson('signupForm')
+      this.errors = {}
       this.$http
-        .post("/api/user/signup", json)
+        .post('/api/user/signup', json)
         .then(() => {
-          this.updatePrivileges();
-          $("#signupModal").modal("hide");
+          this.updatePrivileges()
+          $('#signupModal').modal('hide')
         })
         .catch(error => {
-          this.errors = error.response.data.errors;
-        });
+          this.errors = error.response.data.errors
+        })
     }
   },
   mounted() {
-    let self = this;
-    $("#signupModal").on("hidden.bs.modal", function() {
-      self.errors = {};
-    });
+    const self = this
+    $('#signupModal').on('hidden.bs.modal', () => {
+      self.errors = {}
+    })
   }
-};
+}
 </script>

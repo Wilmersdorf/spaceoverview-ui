@@ -1,4 +1,5 @@
-const webpack = require('webpack');
+const webpack = require('webpack')
+
 module.exports = {
   outputDir: '../spaceoverview/src/main/resources/assets',
   devServer: {
@@ -6,7 +7,10 @@ module.exports = {
       '^/api': {
         target: 'http://localhost:8000',
         changeOrigin: true,
-        secure: false
+        secure: false,
+        onProxyReq(request) {
+          request.setHeader('origin', 'http://localhost:8000')
+        }
       }
     }
   },
@@ -19,4 +23,4 @@ module.exports = {
       })
     ]
   }
-};
+}
