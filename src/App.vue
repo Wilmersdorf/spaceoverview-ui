@@ -2,9 +2,11 @@
   <div id="app">
     <div id="nav" style="text-align: center;">
       <router-link to="/">Home</router-link>&nbsp;|
-      <router-link to="/space">Spaces</router-link>&nbsp;|
-      <router-link to="/property">Properties</router-link>&nbsp;|
-      <router-link to="/theorem">Theorems</router-link>
+      <router-link to="/space">Spaces</router-link>&nbsp;&#45;
+      <router-link to="/property">Properties</router-link>&nbsp;&#45;
+      <router-link to="/theorem">Theorems</router-link>&nbsp;|
+      <router-link to="/differential-equation">Differential&#8201;Equations</router-link>&nbsp;&#45;
+      <router-link to="/differential-equation/property">Properties</router-link>
       <span v-if="canEdit">&nbsp;|&nbsp;</span>
       <router-link v-if="canEdit" to="/info">Info</router-link>
       <span v-if="isAdmin">&nbsp;|&nbsp;</span>
@@ -23,8 +25,8 @@
 </template>
 
 <script>
-import SignupModal from "@/components/SignupModal.vue";
-import LoginModal from "@/components/LoginModal.vue";
+import SignupModal from '@/components/SignupModal.vue'
+import LoginModal from '@/components/LoginModal.vue'
 
 export default {
   components: {
@@ -32,25 +34,40 @@ export default {
     LoginModal
   },
   methods: {
-    logout: function() {
-      this.$http.post("/api/user/logout").then(() => {
-        this.updatePrivileges();
-        if (this.$route.path !== "/") {
-          this.$router.push("/");
+    logout() {
+      this.$http.post('/api/user/logout').then(() => {
+        this.updatePrivileges()
+        if (this.$route.path !== '/') {
+          this.$router.push('/')
         }
-      });
+      })
     }
   }
-};
+}
 </script>
 <style>
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/font/OpenSans-Regular.ttf') format('truetype');
+  font-weight: 400;
+  font-style: normal;
+}
+@font-face {
+  font-family: 'Open Sans';
+  src: url('/font/OpenSans-Bold.ttf') format('truetype');
+  font-weight: 700;
+  font-style: normal;
+}
+body {
+  overflow-y: scroll;
+}
 #app {
-  font-family: "Avenir", Helvetica, Arial, sans-serif;
-  /* font-family: "Open Sans", sans-serif; */
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 400;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  margin-top: 60px;
+  /* color: #2c3e50; */
+  margin-top: 26px;
 }
 a {
   text-decoration: none !important;
@@ -61,7 +78,6 @@ a {
 .action {
   color: #17a2b8 !important;
 }
-
 .footing {
   height: 3.5rem !important;
 }
@@ -100,5 +116,7 @@ a {
   position: relative;
   top: -6.5px;
 }
+.underline {
+  text-decoration: underline;
+}
 </style>
-

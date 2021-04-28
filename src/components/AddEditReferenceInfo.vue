@@ -12,22 +12,33 @@
           <ul>
             <li>One can add references to arxiv, wikipedia or via bibtex.</li>
             <li>
-              The purpose of a reference is to allow another user to verify that the entered information is correct.
-              In their current form, references are not meant to provide a complete overview of all papers related to a space or property.
+              The purpose of a reference is to allow other users to verify that the entered
+              information is correct. In their current form, references are not meant to provide a
+              complete overview of all papers related to an entity.
             </li>
             <li>References can for example be used to:</li>
             <ul>
-              <li>In the case of spaces / properties, reference the paper where the space or property was first defined.</li>
-              <li>If a property or space has changed their definition over time, or if the original paper is not in English, reference an additional paper where the space or property is mentioned in its current form.</li>
-              <li>In the case of a link between a space and a property, reference a paper which proves that the space has / lacks the property.</li>
+              <li>
+                Reference the paper where the entity was first defined (space, differential
+                equation, property) or proved (theorem).
+              </li>
+              <li>
+                If an entity has changed its definition over time, or if the original paper is not
+                in English, reference an additional paper where the entity is mentioned in its
+                current form.
+              </li>
+              <li>
+                In the case of a link, reference a paper which proves that the space or differential
+                equation has or lacks the property.
+              </li>
             </ul>
-            <li>We recommend references to resources that are openly available like arxiv or wikipedia.</li>
+            <li>
+              We recommend references to resources that are openly available like arxiv or
+              wikipedia.
+            </li>
             <li>
               For adding books, one option is to use
-              <a
-                href="https://books.google.com"
-                target="_blank"
-              >Google Books</a>.
+              <a href="https://books.google.com" target="_blank">Google Books</a>.
             </li>
             <ul>
               <li>
@@ -51,6 +62,6 @@
 
 <script>
 export default {
-  name: "AddEditReferenceInfo"
-};
+  name: 'AddEditReferenceInfo'
+}
 </script>

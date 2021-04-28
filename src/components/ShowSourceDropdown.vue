@@ -26,22 +26,22 @@
 
 <script>
 export default {
-  name: "ShowSourceDropdown",
+  name: 'ShowSourceDropdown',
   methods: {
-    toggleShowSource: function() {
-      if ($("#showSource").is(":checked")) {
-        this.$jsCookie.set("showSource", true, { expires: 30 });
+    toggleShowSource() {
+      if ($('#showSource').is(':checked')) {
+        this.$jsCookie.set('showSource', true, { expires: 30 })
       } else {
-        this.$jsCookie.remove("showSource");
+        this.$jsCookie.remove('showSource')
       }
-      this.updateSettings();
+      this.updateSettings()
     }
   },
-  mounted: function() {
-    this.$feather.replace();
-    $("#dropdownMenu").click(function(e) {
-      e.stopPropagation();
-    });
+  mounted() {
+    this.$feather.replace()
+    $('#dropdownMenu').click(event => {
+      event.stopPropagation()
+    })
   }
-};
+}
 </script>

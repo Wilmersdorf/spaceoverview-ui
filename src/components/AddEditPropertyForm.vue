@@ -19,7 +19,7 @@
         :class="{ 'is-invalid': errors['name'] }"
         v-on:input="inputName"
       />
-      <div class="invalid-feedback">{{errors["name"]}}</div>
+      <div class="invalid-feedback">{{ errors['name'] }}</div>
     </div>
     <div id="mathName"></div>
     <div class="form-group mt-4">
@@ -33,7 +33,7 @@
         :class="{ 'is-invalid': errors['description'] }"
         v-on:input="inputDescription"
       />
-      <div class="invalid-feedback">{{errors["description"]}}</div>
+      <div class="invalid-feedback">{{ errors['description'] }}</div>
     </div>
     <div id="mathDescription"></div>
     <div class="form-group mt-4">
@@ -49,7 +49,7 @@
 
 <script>
 export default {
-  name: "AddEditPropertyForm",
+  name: 'AddEditPropertyForm',
   props: {
     property: {
       required: true
@@ -58,29 +58,29 @@ export default {
       required: true
     }
   },
-  data: function() {
+  data() {
     return {
       rendered: false
-    };
-  },
-  methods: {
-    inputName: function(event) {
-      $("#mathName").text(event.target.value);
-      this.render("mathName");
-    },
-    inputDescription: function(event) {
-      $("#mathDescription").text(event.target.value);
-      this.render("mathDescription");
     }
   },
-  mounted: function() {
-    $("#mathName").text(this.property.name);
-    $("#mathDescription").text(this.property.description);
+  methods: {
+    inputName(event) {
+      $('#mathName').text(event.target.value)
+      this.render('mathName')
+    },
+    inputDescription(event) {
+      $('#mathDescription').text(event.target.value)
+      this.render('mathDescription')
+    }
+  },
+  mounted() {
+    $('#mathName').text(this.property.name)
+    $('#mathDescription').text(this.property.description)
     this.$nextTick(() => {
-      this.render("mathName");
-      this.render("mathDescription");
-      this.rendered = true;
-    });
+      this.render('mathName')
+      this.render('mathDescription')
+      this.rendered = true
+    })
   }
-};
+}
 </script>

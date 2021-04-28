@@ -10,10 +10,9 @@
         </div>
         <div v-if="referenceUi" class="modal-body">
           Please provide either an Arxiv id or English Wikipedia url or BibTeX.
-          <div
-            class="alert alert-danger mt-2"
-            v-if="referenceErrors['general']"
-          >{{referenceErrors["general"]}}</div>
+          <div class="alert alert-danger mt-2" v-if="referenceErrors['general']">
+            {{ referenceErrors['general'] }}
+          </div>
           <form
             @submit.prevent
             id="referenceForm"
@@ -32,7 +31,7 @@
                 placeholder="1234.56789"
                 :class="{ 'is-invalid': referenceErrors['arxivId'] }"
               />
-              <div class="invalid-feedback">{{referenceErrors["arxivId"]}}</div>
+              <div class="invalid-feedback">{{ referenceErrors['arxivId'] }}</div>
             </div>
             <div class="form-group mt-4">
               <label for="wikipediaUrl">English Wikipedia url</label>
@@ -44,7 +43,7 @@
                 placeholder="https://en.wikipedia.org/wiki/Lp_space"
                 :class="{ 'is-invalid': referenceErrors['wikipediaUrl'] }"
               />
-              <div class="invalid-feedback">{{referenceErrors["wikipediaUrl"]}}</div>
+              <div class="invalid-feedback">{{ referenceErrors['wikipediaUrl'] }}</div>
             </div>
             <div class="form-group mt-4">
               <label for="bibtex">BibTeX</label>
@@ -56,9 +55,9 @@
                 rows="10"
                 :class="{ 'is-invalid': referenceErrors['bibtex'] }"
               />
-              <div class="invalid-feedback">{{referenceErrors['bibtex']}}</div>
+              <div class="invalid-feedback">{{ referenceErrors['bibtex'] }}</div>
             </div>
-            {{referenceErrors['bibtex']}}
+            {{ referenceErrors['bibtex'] }}
             <div class="form-group mt-4">
               <label for="page">Page (Optional)</label>
               <input
@@ -69,7 +68,7 @@
                 placeholder="2"
                 :class="{ 'is-invalid': referenceErrors['page'] }"
               />
-              <div class="invalid-feedback">{{referenceErrors['page']}}</div>
+              <div class="invalid-feedback">{{ referenceErrors['page'] }}</div>
             </div>
             <div class="form-group mt-4">
               <label for="statement">Statement (Optional)</label>
@@ -84,12 +83,12 @@
           </form>
         </div>
         <div class="modal-footer">
-          <button
-            @click="submitReference"
-            type="button"
-            class="btn btn-primary mr-auto"
-          >{{leftButtonLabel}}</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">{{rightButtonLabel}}</button>
+          <button @click="submitReference" type="button" class="btn btn-primary mr-auto">
+            {{ leftButtonLabel }}
+          </button>
+          <button type="button" class="btn btn-secondary" data-dismiss="modal">
+            {{ rightButtonLabel }}
+          </button>
         </div>
       </div>
     </div>
@@ -98,174 +97,150 @@
 
 <script>
 export default {
-  name: "AddEditReferenceModal",
+  name: 'AddEditReferenceModal',
   props: {
     reference: null,
     referenceIndex: null
   },
   watch: {
-    reference: function() {
-      this.referenceErrors = {};
-      if (this.reference != null) {
-        this.referenceUi = { ...this.reference };
+    reference() {
+      this.referenceErrors = {}
+      if (this.reference !== null) {
+        this.referenceUi = this.clone(this.reference)
         if (this.referenceUi.wikipediaId !== null) {
-          this.wikipediaUrl = this.referenceUi.url;
+          this.wikipediaUrl = this.referenceUi.url
         } else {
-          this.wikipediaUrl = null;
+          this.wikipediaUrl = null
         }
-        $("#referenceModal").modal("show");
+        $('#referenceModal').modal('show')
       }
     }
   },
-  data: function() {
+  data() {
     return {
       referenceErrors: {},
       referenceUi: null,
       wikipediaUrl: null
-    };
+    }
   },
   computed: {
-    leftButtonLabel: function() {
-      return this.referenceIndex === null
-        ? "Add reference"
-        : "Update reference";
+    leftButtonLabel() {
+      return this.referenceIndex === null ? 'Add reference' : 'Update reference'
     },
-    rightButtonLabel: function() {
-      return this.referenceIndex === null ? "Close" : "Cancel";
+    rightButtonLabel() {
+      return this.referenceIndex === null ? 'Close' : 'Cancel'
     },
-    title: function() {
-      return this.referenceIndex === null ? "Add reference" : "Edit reference";
+    title() {
+      return this.referenceIndex === null ? 'Add reference' : 'Edit reference'
     }
   },
   methods: {
-    submitReference: function() {
-      let form = $("#referenceForm");
-      let json = this.convertFormToJson(form);
-      let errors = {};
-      let arxivId = json.arxivId;
-      let bibtex = json.bibtex;
-      let wikipediaUrl = json.wikipediaUrl;
-      let page = json.page;
-      let statement = json.statement;
-      let contentCount =
-        (arxivId ? 1 : 0) + (wikipediaUrl ? 1 : 0) + (bibtex ? 1 : 0);
+    submitReference() {
+      const formJson = this.convertFormToJson('referenceForm')
+      const errors = {}
+      const { arxivId, bibtex, wikipediaUrl, page, statement } = formJson
+      const contentCount = (arxivId ? 1 : 0) + (wikipediaUrl ? 1 : 0) + (bibtex ? 1 : 0)
       if (contentCount === 0) {
-        errors["general"] =
-          "Please provide either an Arxiv id or an English Wikipedia url or BibTeX.";
+        errors.general = 'Please provide either an Arxiv id or an English Wikipedia url or BibTeX.'
       } else if (contentCount >= 2) {
-        errors["general"] =
-          "Please provide either an Arxiv id or an English Wikipedia url or BibTeX, but not more than one.";
+        errors.general =
+          'Please provide either an Arxiv id or an English Wikipedia url or BibTeX, but not more than one.'
       }
-      if (
-        page != null &&
-        (!isFinite(page) || parseInt(page) < 0 || parseInt(page) > 100000)
-      ) {
-        errors["page"] =
-          "Please enter a single positive number or leave empty.";
+      const pageNumber = page ? parseInt(page, 10) : null
+      if (page !== null && (Number.isNaN(pageNumber) || pageNumber < 0 || pageNumber > 100000)) {
+        errors.page = 'Please enter a single positive number or leave empty.'
       }
       if ($.isEmptyObject(errors)) {
-        let pageNumber = page ? parseInt(page) : null;
         if (!isEmpty(wikipediaUrl)) {
-          if (!wikipediaUrl.startsWith("https://en.wikipedia.org/wiki/")) {
-            this.showError("wikipediaUrl", "Unable to parse Wikipedia url.");
+          if (!wikipediaUrl.startsWith('https://en.wikipedia.org/wiki/')) {
+            this.showError('wikipediaUrl', 'Unable to parse Wikipedia url.')
           } else {
-            let name = wikipediaUrl.slice(
-              "https://en.wikipedia.org/wiki/".length
-            );
+            const name = wikipediaUrl.slice('https://en.wikipedia.org/wiki/'.length)
             this.$http
               .get(
                 `https://en.wikipedia.org/w/api.php?action=parse&format=json&page=${name}&origin=*`
               )
               .then(response => {
-                let title = response.data.parse.title;
-                let pageid = response.data.parse.pageid;
+                const { title, pageid } = response.data.parse
                 if (title !== null && pageid !== null) {
-                  let reference = {
-                    url:
-                      `https://en.wikipedia.org/wiki/` +
-                      title.replace(new RegExp(" ", "g"), "_"),
+                  const underscoreTitle = title.replace(new RegExp(' ', 'g'), '_')
+                  const reference = {
+                    url: `https://en.wikipedia.org/wiki/${underscoreTitle}`,
                     arxivId: null,
                     wikipediaId: pageid,
                     bibtex: null,
-                    title: title,
+                    title,
                     page: pageNumber,
-                    statement: statement
-                  };
-                  this.emitReference(reference);
+                    statement
+                  }
+                  this.emitReference(reference)
                 } else {
-                  this.showError(
-                    "wikipediaUrl",
-                    "Unable to parse Wikipedia url."
-                  );
+                  this.showError('wikipediaUrl', 'Unable to parse Wikipedia url.')
                 }
               })
               .catch(() => {
-                this.showError(
-                  "wikipediaUrl",
-                  "Unable to parse Wikipedia url."
-                );
-              });
+                this.showError('wikipediaUrl', 'Unable to parse Wikipedia url.')
+              })
           }
         } else if (!isEmpty(arxivId)) {
           this.$http
-            .get(
-              `https://export.arxiv.org/api/query?search_query=&id_list=${arxivId}`,
-              { responseType: "text" }
-            )
+            .get(`https://export.arxiv.org/api/query?search_query=&id_list=${arxivId}`, {
+              responseType: 'text'
+            })
             .then(response => {
-              let self = this;
-              this.$xml.parseString(response.data, function(err, result) {
-                let title = result.feed.entry[0].title[0];
-                let reference = {
+              const self = this
+              this.$xml.parseString(response.data, (err, result) => {
+                const title = result.feed.entry[0].title[0]
+                const reference = {
                   url: `https://arxiv.org/abs/${arxivId}`,
-                  arxivId: arxivId,
+                  arxivId,
                   wikipediaId: null,
-                  title: title,
+                  title,
                   page: pageNumber,
-                  statement: statement,
+                  statement,
                   bibtex: null
-                };
-                self.emitReference(reference);
-              });
+                }
+                self.emitReference(reference)
+              })
             })
             .catch(() => {
-              this.showError("arxivId", "Please enter a valid Arxiv id.");
-            });
+              this.showError('arxivId', 'Please enter a valid Arxiv id.')
+            })
         } else {
           try {
-            let json = this.$bibtex.toJSON(bibtex);
-            let title = json[0].entryTags.title;
+            const json = this.$bibtex.toJSON(bibtex)
+            const { title } = json[0].entryTags
             if (isEmpty(title)) {
-              this.showError("bibtex", "Please provide BibTex with a title.");
+              this.showError('bibtex', 'Please provide BibTex with a title.')
             } else {
-              let url = json[0].entryTags.url;
-              let reference = {
-                url: url,
+              const { url } = json[0].entryTags
+              const reference = {
+                url,
                 arxivId: null,
                 wikipediaId: null,
-                title: title,
+                title,
                 page: pageNumber,
-                statement: statement,
-                bibtex: bibtex
-              };
-              this.emitReference(reference);
+                statement,
+                bibtex
+              }
+              this.emitReference(reference)
             }
           } catch (error) {
-            this.showError("bibtex", "Unable to parse BibTex.");
+            this.showError('bibtex', 'Unable to parse BibTex.')
           }
         }
       } else {
-        this.referenceErrors = errors;
+        this.referenceErrors = errors
       }
     },
-    showError: function(key, value) {
-      this.referenceErrors = { [key]: value };
+    showError(key, value) {
+      this.referenceErrors = { [key]: value }
     },
-    emitReference: function(reference) {
-      $("#referenceModal").modal("hide");
-      this.referenceErrors = {};
-      this.$emit("addEditReference", reference, this.referenceIndex);
+    emitReference(reference) {
+      $('#referenceModal').modal('hide')
+      this.referenceErrors = {}
+      this.$emit('addEditReference', reference, this.referenceIndex)
     }
   }
-};
+}
 </script>

@@ -9,16 +9,18 @@
         v-model="link.field"
         :class="{ 'is-invalid': errors['field'] }"
       >
-        <option v-for="option in options" :key="option" :value="option">{{formatFieldLink(option)}}</option>
+        <option v-for="option in options" :key="option" :value="option">{{
+          formatFieldLink(option)
+        }}</option>
       </select>
-      <div class="invalid-feedback">{{errors["field"]}}</div>
+      <div class="invalid-feedback">{{ errors['field'] }}</div>
     </div>
   </form>
 </template>
 
 <script>
 export default {
-  name: "AddEditLinkForm",
+  name: 'AddEditLinkForm',
   props: {
     space: {
       required: true
@@ -34,40 +36,40 @@ export default {
     }
   },
   computed: {
-    options: function() {
-      let space = this.space;
-      let property = this.property;
-      if (space.field === "REAL") {
-        if (property.field === "COMPLEX") {
-          return [];
+    options() {
+      const { space, property } = this
+      if (space.field === 'REAL') {
+        if (property.field === 'COMPLEX') {
+          return []
         } else {
-          return ["REAL", "NOT_REAL"];
+          return ['REAL', 'NOT_REAL']
         }
-      } else if (space.field === "COMPLEX") {
-        if (property.field === "REAL") {
-          return [];
+      } else if (space.field === 'COMPLEX') {
+        if (property.field === 'REAL') {
+          return []
         } else {
-          return ["COMPLEX", "NOT_COMPLEX"];
+          return ['COMPLEX', 'NOT_COMPLEX']
         }
       } else {
-        if (property.field === "REAL") {
-          return ["REAL", "NOT_REAL"];
-        } else if (property.field === "COMPLEX") {
-          return ["COMPLEX", "NOT_COMPLEX"];
+        // eslint-disable-next-line
+        if (property.field === 'REAL') {
+          return ['REAL', 'NOT_REAL']
+        } else if (property.field === 'COMPLEX') {
+          return ['COMPLEX', 'NOT_COMPLEX']
         } else {
           return [
-            "REAL",
-            "COMPLEX",
-            "REAL_AND_COMPLEX",
-            "NOT_REAL",
-            "NOT_COMPLEX",
-            "NOT_REAL_AND_NOT_COMPLEX",
-            "REAL_AND_NOT_COMPLEX",
-            "NOT_REAL_AND_COMPLEX"
-          ];
+            'REAL',
+            'COMPLEX',
+            'REAL_AND_COMPLEX',
+            'NOT_REAL',
+            'NOT_COMPLEX',
+            'NOT_REAL_AND_NOT_COMPLEX',
+            'REAL_AND_NOT_COMPLEX',
+            'NOT_REAL_AND_COMPLEX'
+          ]
         }
       }
     }
   }
-};
+}
 </script>

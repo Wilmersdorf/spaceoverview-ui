@@ -1,46 +1,44 @@
 <template>
   <div v-show="rendered">
-    <h1
-      v-if="titleSize === 'big'"
-      class="mt-3 math-theorem"
-      :class="center ? 'text-center' : ''"
-    >{{theoremName}}</h1>
+    <h1 v-if="titleSize === 'big'" class="mt-3 math-component" :class="center ? 'text-center' : ''">
+      {{ theoremName }}
+    </h1>
     <div
       v-if="titleSize === 'small' && theorem.name !== null"
-      class="mt-3 math-theorem"
+      class="mt-3 math-component"
       :class="center ? 'text-center' : ''"
-    >{{theoremName}}</div>
+    >
+      {{ theoremName }}
+    </div>
     <div class="d-flex flex-column" :class="center ? 'align-items-center' : ''">
       <div>
         <Conditions :theorem="theorem"></Conditions>
         <div class="mt-2">
-          <div v-if="!showLink" class="math-theorem">$\Longrightarrow$</div>
-          <router-link
-            v-if="showLink"
-            class="math-theorem"
-            :to="`/theorem/${theorem.id}`"
-          >$\Longrightarrow$</router-link>
+          <div v-if="!showLink" class="math-component">$\Longrightarrow$</div>
+          <router-link v-if="showLink" class="math-component" :to="`/theorem/${theorem.id}`"
+            >$\Longrightarrow$</router-link
+          >
         </div>
         <Conclusions class="ml-5" :theorem="theorem"></Conclusions>
       </div>
     </div>
-    <References v-if="showReferences" :id="theorem.id" :references="theorem.references"></References>
+    <References v-if="showReferences" :references="theorem.references"></References>
   </div>
 </template>
 
 <script>
-import Conditions from "@/components/Conditions.vue";
-import Conclusions from "@/components/Conclusions.vue";
-import References from "@/components/References.vue";
+import Conditions from '@/components/Conditions.vue'
+import Conclusions from '@/components/Conclusions.vue'
+import References from '@/components/References.vue'
 
 export default {
-  name: "TheoremInfo",
+  name: 'TheoremInfo',
   props: {
     theorem: {
       required: true
     },
     titleSize: {
-      default: "big"
+      default: 'big'
     },
     showReferences: {
       default: true
@@ -52,30 +50,27 @@ export default {
       default: true
     }
   },
-  data: function() {
+  data() {
     return {
       rendered: false
-    };
+    }
   },
   computed: {
-    theoremName: function() {
+    theoremName() {
       if (this.theorem === null || isEmpty(this.theorem.name)) {
-        return "Theorem";
+        return 'Theorem'
       } else {
-        return this.theorem.name;
+        return this.theorem.name
       }
     }
   },
-  mounted: function() {
-    this.$nextTick(() => {
-      this.renderByClass("math-theorem", $(this.$el));
-      this.rendered = true;
-    });
+  mounted() {
+    this.renderComponent()
   },
   components: {
     Conditions,
     Conclusions,
     References
   }
-};
+}
 </script>
