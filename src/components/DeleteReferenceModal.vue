@@ -1,33 +1,22 @@
 <template>
-  <div class="modal fade" id="deleteReferenceModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+  <div id="deleteReferenceModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Delete reference</h5>
-          <button type="button" class="close" data-dismiss="modal">
-            <span>&times;</span>
-          </button>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
         </div>
-        <div v-if="reference" v-show="rendered" class="modal-body">
+        <div v-if="reference" class="modal-body">
           <div>
-            <a
-              id="deleteReferenceTitle"
-              :href="reference.url"
-              target="_blank"
-              class="d-inline"
-            >{{reference.title}}</a>
-            <div v-if="reference.page" class="d-inline">, page {{reference.page}}</div>
-            <div v-if="reference.statement" class="d-inline">, {{reference.statement}}</div>
+            <a :href="reference.url" target="_blank" class="d-inline math">{{ reference.title }}</a>
+            <div v-if="reference.page" class="d-inline">, page {{ reference.page }}</div>
+            <div v-if="reference.statement" class="d-inline">, {{ reference.statement }}</div>
           </div>
           <div class="mt-4">Do you really want to delete this reference?</div>
         </div>
         <div class="modal-footer">
-          <button
-            @click="deleteReference"
-            type="button"
-            class="btn btn-danger mr-auto"
-          >Delete reference</button>
-          <button type="button" class="btn btn-success" data-dismiss="modal">Cancel</button>
+          <button class="btn btn-danger me-auto" @click="deleteReference">Delete reference</button>
+          <button class="btn btn-success" data-bs-dismiss="modal">Cancel</button>
         </div>
       </div>
     </div>
@@ -36,33 +25,24 @@
 
 <script>
 export default {
-  name: "DeleteReferenceModal",
   props: {
     reference: null,
     referenceIndex: null
   },
+  emits: ['deleteReference'],
   watch: {
-    reference: function() {
-      if (this.reference != null) {
-        this.rendered = false;
-        $("#deleteReferenceModal").modal("show");
-        this.$nextTick(() => {
-          this.render("deleteReferenceTitle");
-          this.rendered = true;
-        });
+    reference() {
+      if (this.reference !== null) {
+        Modal.getOrCreateInstance(document.getElementById('deleteReferenceModal')).show()
+        this.renderMathNow()
       }
     }
   },
-  data: function() {
-    return {
-      rendered: false
-    };
-  },
   methods: {
-    deleteReference: function() {
-      this.$emit("deleteReference", this.referenceIndex);
-      $("#deleteReferenceModal").modal("hide");
+    deleteReference() {
+      this.$emit('deleteReference', this.referenceIndex)
+      Modal.getInstance(document.getElementById('deleteReferenceModal')).hide()
     }
   }
-};
+}
 </script>

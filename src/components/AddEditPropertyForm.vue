@@ -1,44 +1,42 @@
 <template>
   <form
-    v-show="rendered"
-    @submit.prevent
     id="addEditPropertyForm"
+    autocapitalize="off"
     autocomplete="off"
     autocorrect="off"
-    autocapitalize="off"
     spellcheck="false"
+    @submit.prevent
   >
-    <div class="form-group mt-4">
-      <label for="name">Name</label>
+    <div>
+      <label for="name" class="form-label">Name</label>
       <input
-        v-model="property.name"
-        class="form-control"
         id="name"
         name="name"
         placeholder="Name"
-        :class="{ 'is-invalid': errors['name'] }"
-        v-on:input="inputName"
-      />
-      <div class="invalid-feedback">{{errors["name"]}}</div>
-    </div>
-    <div id="mathName"></div>
-    <div class="form-group mt-4">
-      <label for="description">Description</label>
-      <input
-        v-model="property.description"
+        autocomplete="off"
         class="form-control"
+        :class="{ 'is-invalid': errors['name'] }"
+        @input="inputMath"
+      />
+      <div class="invalid-feedback">{{ errors['name'] }}</div>
+    </div>
+    <div id="mathName" class="mt-2"></div>
+    <div class="mt-4">
+      <label for="description" class="form-label">Description</label>
+      <input
         id="description"
         name="description"
         placeholder="Description"
+        class="form-control"
         :class="{ 'is-invalid': errors['description'] }"
-        v-on:input="inputDescription"
+        @input="inputMath"
       />
-      <div class="invalid-feedback">{{errors["description"]}}</div>
+      <div class="invalid-feedback">{{ errors['description'] }}</div>
     </div>
-    <div id="mathDescription"></div>
-    <div class="form-group mt-4">
-      <label for="field">Field</label>
-      <select class="form-control" id="field" name="field" v-model="property.field">
+    <div id="mathDescription" class="mt-2"></div>
+    <div class="mt-4">
+      <label for="fieldSelect" class="form-label">Field</label>
+      <select id="fieldSelect" name="field" class="form-select">
         <option value="REAL_OR_COMPLEX">Real or complex numbers</option>
         <option value="REAL">Real numbers only</option>
         <option value="COMPLEX">Complex numbers only</option>
@@ -49,38 +47,14 @@
 
 <script>
 export default {
-  name: "AddEditPropertyForm",
   props: {
-    property: {
-      required: true
-    },
-    errors: {
-      required: true
-    }
+    property: Object,
+    errors: Object
   },
-  data: function() {
-    return {
-      rendered: false
-    };
-  },
-  methods: {
-    inputName: function(event) {
-      $("#mathName").text(event.target.value);
-      this.render("mathName");
-    },
-    inputDescription: function(event) {
-      $("#mathDescription").text(event.target.value);
-      this.render("mathDescription");
-    }
-  },
-  mounted: function() {
-    $("#mathName").text(this.property.name);
-    $("#mathDescription").text(this.property.description);
-    this.$nextTick(() => {
-      this.render("mathName");
-      this.render("mathDescription");
-      this.rendered = true;
-    });
+  mounted() {
+    this.init('fieldSelect', this.property.field)
+    this.initMath('name', this.property.name)
+    this.initMath('description', this.property.description)
   }
-};
+}
 </script>

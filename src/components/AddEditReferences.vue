@@ -1,31 +1,35 @@
 <template>
   <div>
-    <div>
-      <span>References&nbsp;</span>
-      <a class="d-inline" href="#" data-toggle="modal" data-target="#addEditReferenceInfoModal">
+    <div class="d-flex">
+      <div class="me-1">References</div>
+      <a href="#" data-bs-toggle="modal" data-bs-target="#addEditReferenceInfoModal">
         <small>Info</small>
       </a>
     </div>
-    <div v-for="(reference,index) in references" :key="`${reference.title}-${index}`">
-      <div class="d-flex flex-row align-items-center">
-        <a :id="`reference-${index}`" :href="reference.url" target="_blank">{{reference.title}}</a>
-        <div v-if="reference.page">, page {{reference.page}}</div>
-        <div v-if="reference.statement">, {{reference.statement}}</div>
+    <div v-for="(item, index) in references" :key="`${item.title}-${index}`">
+      <div class="d-flex align-items-center">
+        <div class="me-2">
+          <a :href="item.url" target="_blank" class="math d-inline">{{ item.title }}</a>
+          <div v-if="item.page" class="d-inline text-break">, page {{ item.page }}</div>
+          <div v-if="item.statement" class="d-inline text-break">, {{ item.statement }}</div>
+        </div>
         <button
+          class="ms-auto btn btn-outline-secondary btn-sm mt-2"
           @click="openEditReference(index)"
-          class="ml-auto btn btn-outline-secondary btn-sm mt-2"
-        >Edit</button>
-        <button
-          @click="openDeleteReference(index)"
-          class="ml-2 btn btn-outline-danger btn-sm mt-2"
-        >Delete</button>
+        >
+          Edit
+        </button>
+        <button class="ms-2 btn btn-outline-danger btn-sm mt-2" @click="openDeleteReference(index)">
+          Delete
+        </button>
       </div>
-      <div
-        v-if="errors[`reference[${index}]`]"
-        class="text-danger"
-      >{{errors[`reference[${index}]`]}}</div>
+      <div v-if="errors[`reference[${index}]`]" class="text-danger">
+        {{ errors[`reference[${index}]`] }}
+      </div>
     </div>
-    <button class="btn btn-outline-secondary btn-sm mt-2" @click="openAddReference">Add reference</button>
+    <button class="btn btn-outline-secondary btn-sm mt-2" @click="openAddReference">
+      Add reference
+    </button>
     <AddEditReferenceModal
       :reference="reference"
       :referenceIndex="referenceIndex"
@@ -36,84 +40,79 @@
       :referenceIndex="deleteReferenceIndex"
       @deleteReference="deleteReferenceCallback"
     ></DeleteReferenceModal>
-    <AddEditReferenceInfo></AddEditReferenceInfo>
+    <AddEditReferenceInfoModal />
   </div>
 </template>
 
 <script>
-import AddEditReferenceModal from "@/components/AddEditReferenceModal.vue";
-import DeleteReferenceModal from "@/components/DeleteReferenceModal.vue";
-import AddEditReferenceInfo from "@/components/AddEditReferenceInfo.vue";
+import AddEditReferenceInfoModal from '@/components/AddEditReferenceInfoModal.vue'
+import AddEditReferenceModal from '@/components/AddEditReferenceModal.vue'
+import DeleteReferenceModal from '@/components/DeleteReferenceModal.vue'
 
 export default {
-  name: "AddEditReferences",
+  components: {
+    AddEditReferenceInfoModal,
+    AddEditReferenceModal,
+    DeleteReferenceModal
+  },
   props: {
     references: Array,
-    errors: {}
+    errors: Object
   },
-  data: function() {
+  emits: ['changeReferences'],
+  data() {
     return {
       reference: null,
       deleteReference: null,
       referenceIndex: null,
       deleteReferenceIndex: null
-    };
-  },
-  methods: {
-    openAddReference: function() {
-      this.referenceIndex = null;
-      this.reference = {};
-    },
-    openEditReference: function(index) {
-      this.referenceIndex = index;
-      this.reference = this.references[index];
-    },
-    openDeleteReference: function(index) {
-      this.deleteReferenceIndex = index;
-      this.deleteReference = this.references[index];
-    },
-    addEditReferenceCallback: function(reference, index) {
-      let references = this.references.map(it => ({ ...it }));
-      if (index != null) {
-        references[index] = reference;
-      } else {
-        references.push(reference);
-      }
-      this.$emit("changeReferences", references);
-    },
-    deleteReferenceCallback: function(index) {
-      let references = this.references.map(it => ({ ...it }));
-      references.splice(index, 1);
-      this.$emit("changeReferences", references);
-    },
-    resetModals: function() {
-      this.deleteReference = null;
-      this.deleteReferenceIndex = null;
-      this.reference = null;
-      this.referenceIndex = null;
     }
   },
   mounted() {
-    let self = this;
-    $("#referenceModal").on("hidden.bs.modal", function() {
-      self.resetModals();
-    });
-    $("#deleteReferenceModal").on("hidden.bs.modal", function() {
-      self.resetModals();
-    });
-    for (let i = 0; i < this.references.length; i++) {
-      this.render(`reference-${i}`);
-    }
+    document.getElementById('referenceModal').addEventListener('hidden.bs.modal', () => {
+      this.resetModals()
+    })
+    document.getElementById('deleteReferenceModal').addEventListener('hidden.bs.modal', () => {
+      this.resetModals()
+    })
+    this.renderMathNow()
   },
   updated() {
-    for (let i = 0; i < this.references.length; i++) {
-      this.render(`reference-${i}`);
-    }
+    this.renderMathNow()
   },
-  components: {
-    AddEditReferenceModal,
-    DeleteReferenceModal,
-    AddEditReferenceInfo
+  methods: {
+    openAddReference() {
+      this.referenceIndex = null
+      this.reference = {}
+    },
+    openEditReference(index) {
+      this.referenceIndex = index
+      this.reference = this.references[index]
+    },
+    openDeleteReference(index) {
+      this.deleteReferenceIndex = index
+      this.deleteReference = this.references[index]
+    },
+    addEditReferenceCallback(reference, index) {
+      const references = this.clone(this.references)
+      if (index !== null) {
+        references[index] = reference
+      } else {
+        references.push(reference)
+      }
+      this.$emit('changeReferences', references)
+    },
+    deleteReferenceCallback(index) {
+      const references = this.clone(this.references)
+      references.splice(index, 1)
+      this.$emit('changeReferences', references)
+    },
+    resetModals() {
+      this.deleteReference = null
+      this.deleteReferenceIndex = null
+      this.reference = null
+      this.referenceIndex = null
+    }
   }
-};
+}
 </script>

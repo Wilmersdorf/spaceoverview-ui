@@ -6,58 +6,72 @@
       </ol>
     </nav>
     <h1 class="mt-3 text-center">Home</h1>
-    <div
-      class="mt-4"
-    >SpaceOverview.com is an open source project that makes it easier for students and researchers to find mathematical knowledge.</div>
-    <div class="mt-2 mb-2">
-      We currently list
-      <a
-        href="https://en.wikipedia.org/wiki/Banach_space"
-        target="_blank"
-      >Banach spaces</a> and their properties to answer the following questions:
+    <div class="mt-4">
+      SpaceOverview.com is an open source project that makes it easy for students and researchers to
+      find mathematical knowledge.
     </div>
-    <ul>
-      <li>Given a Banach space, which properties does this space have or lack?</li>
-      <li>Given a property, which Banach spaces have or lack this property?</li>
-    </ul>You can
+    <div class="mt-2">We currently list</div>
     <ul>
       <li>
-        See a list of all
-        <router-link :to="`/space`">spaces</router-link>
+        Banach spaces (<a href="https://en.wikipedia.org/wiki/Banach_space" target="_blank"
+          >wikipedia info</a
+        >)
       </li>
       <li>
-        See a list of all
-        <router-link :to="`/property`">properties</router-link>
+        Differential equations (<a
+          href="https://en.wikipedia.org/wiki/Differential_equation"
+          target="_blank"
+          >wikipedia info</a
+        >)
+      </li>
+    </ul>
+    <div>You can</div>
+    <ul>
+      <li>
+        See a list of
+        <router-link to="/space">Banach spaces</router-link>
       </li>
       <li>
-        See a list of all
-        <router-link :to="`/theorem`">theorems</router-link>
+        See a list of
+        <router-link to="/property">properties</router-link> of Banach spaces
       </li>
       <li>
-        <span>Browse the source code on GitHub (</span>
-        <a href="https://github.com/Wilmersdorf/spaceoverview" target="_blank">Server</a>,
-        <a href="https://github.com/Wilmersdorf/spaceoverview-ui" target="_blank">Front end</a>
-        <span>)</span>
+        See a list of
+        <router-link to="/theorem">theorems</router-link> of Banach spaces
+      </li>
+      <li class="mt-3">
+        See a list of
+        <router-link to="/differential-equation">differential equations</router-link>
+      </li>
+      <li>
+        See a list of
+        <router-link to="/differential-equation/property">properties</router-link> of differential
+        equations
+      </li>
+      <li class="mt-3">
+        Browse the source code on GitHub (<a
+          href="https://github.com/Wilmersdorf/spaceoverview"
+          target="_blank"
+          >Server</a
+        >, <a href="https://github.com/Wilmersdorf/spaceoverview-ui" target="_blank">Front end</a>)
       </li>
       <li>
         Find a list of future product ideas on
         <a
           href="https://www.notion.so/Product-Plan-ad0dae2671974850a42cd0db3145e212"
           target="_blank"
-        >Notion</a>
+          >Notion</a
+        >
       </li>
     </ul>
     <div>
-      This website is currrently in alpha status. Please write an email to info@spaceoverview.com if you're interested in contributing to this project, for example by
+      This website is currrently in alpha status. Please write an email to info@spaceoverview.com to
+      contribute to this project, for example by
       <ul>
+        <li>Adding Banach spaces, differential equations, properties or theorems</li>
         <li>Giving feedback</li>
         <li>Testing future versions</li>
-        <li>Adding spaces, properties and theorems</li>
       </ul>
     </div>
   </div>
 </template>
-
-<script>
-export default {};
-</script>

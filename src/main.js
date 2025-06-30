@@ -1,53 +1,27 @@
-import Vue from 'vue';
-import App from './App.vue';
-import router from './router';
-import 'bootstrap';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import axios from 'axios';
-import xml2js from 'xml2js';
-import bibtexParseJs from 'bibtex-parse-js';
-import jsCookie from 'js-cookie';
-import feather from 'feather-icons';
+import { Modal } from 'bootstrap'
+window.Modal = Modal
+import 'bootstrap/dist/css/bootstrap.min.css'
+import 'katex/dist/katex.min.js'
+import 'katex/dist/katex.min.css'
+import renderMathInElement from 'katex/dist/contrib/auto-render.min.js'
+import jsCookie from 'js-cookie'
+import { Cite } from '@citation-js/core'
+import '@citation-js/plugin-bibtex/lib/index.js'
+import { createApp } from 'vue'
+import App from '@/App.vue'
+import router from '@/router'
 
-var privileges = {
+const privileges = {
   isAdmin: jsCookie.get('isAdmin') === 'true',
   canEdit: jsCookie.get('canEdit') === 'true'
-};
-var settings = {
-  showSource: jsCookie.get('showSource') === 'true'
-};
+}
 
-axios.interceptors.request.use(config => {
-  config.headers.post['X-CSRF-Token'] = jsCookie.get('csrf');
-  config.headers.delete['X-CSRF-Token'] = jsCookie.get('csrf');
-  return config;
-});
+const settings = {
+  showSource: (jsCookie.get('showSource') || 'true') === 'true',
+  mode: jsCookie.get('mode') || 'light'
+}
 
-axios.interceptors.response.use(
-  function(response) {
-    return response;
-  },
-  function(error) {
-    if (
-      (error.response.config.method === 'post' || error.response.config.method === 'delete') &&
-      $.type(error.response.data) === 'string' &&
-      error.response.data.startsWith('Proxy error')
-    ) {
-      error.response.data = {
-        errors: {}
-      };
-    }
-    return Promise.reject(error);
-  }
-);
-
-Vue.prototype.$http = axios;
-Vue.prototype.$xml = xml2js;
-Vue.prototype.$bibtex = bibtexParseJs;
-Vue.prototype.$jsCookie = jsCookie;
-Vue.prototype.$feather = feather;
-
-const FIELD_LINK = [
+const fieldLinks = [
   'REAL',
   'COMPLEX',
   'REAL_AND_COMPLEX',
@@ -56,128 +30,156 @@ const FIELD_LINK = [
   'NOT_REAL_AND_NOT_COMPLEX',
   'REAL_AND_NOT_COMPLEX',
   'NOT_REAL_AND_COMPLEX'
-];
+]
 
-window.isEmpty = function(str) {
-  return str === null || str === undefined || str.trim().length === 0;
-};
+const renderMathElement = element => {
+  renderMathInElement(element, {
+    delimiters: [{ left: '$', right: '$', display: false }]
+  })
+}
 
-Vue.mixin({
-  data: function() {
+const globalMixin = {
+  data() {
     return {
-      privileges: privileges,
-      settings: settings,
-      FIELD_LINK: FIELD_LINK
-    };
+      Cite,
+      fieldLinks,
+      jsCookie,
+      privileges,
+      settings
+    }
   },
   methods: {
-    convertFormToJson: function(form) {
-      let array = form.serializeArray();
-      let json = {};
-      $.each(array, function() {
-        let value = this.value ? this.value.trim() : null;
-        json[this.name] = value;
-      });
-      return json;
+    isEmpty(str) {
+      return str === null || str === undefined || str.trim().length === 0
     },
-    renderByClass: function(clazz, root = $(document)) {
-      if (typeof renderMathInElement === 'function') {
-        root.find('.' + clazz).each((index, element) => {
-          renderMathInElement(element, {
-            delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }]
-          });
-        });
-      } else {
-        setTimeout(() => this.renderByClass(clazz, root), 1);
+    clone(object) {
+      return JSON.parse(JSON.stringify(object))
+    },
+    convertFormToJson(formId) {
+      const formData = new FormData(document.getElementById(formId))
+      const json = {}
+      for (const pair of formData.entries()) {
+        json[pair[0]] = pair[1].trim()
       }
+      return json
     },
-    render: function(id) {
-      if (typeof renderMathInElement === 'function') {
-        renderMathInElement($('#' + id)[0], {
-          delimiters: [{ left: '$$', right: '$$', display: true }, { left: '$', right: '$', display: false }]
-        });
-      } else {
-        setTimeout(() => this.render(id), 1);
-      }
+    renderMath() {
+      this.loaded = true
+      this.$nextTick(() => {
+        Array.from(this.$el.getElementsByClassName('math')).forEach(element => {
+          renderMathElement(element)
+        })
+        this.rendered = true
+      })
     },
-    formatField: function(field) {
+    renderMathNow() {
+      Array.from(this.$el.getElementsByClassName('math')).forEach(element => {
+        renderMathElement(element)
+      })
+    },
+    render(id) {
+      renderMathElement(document.getElementById(id))
+    },
+    init(id, value) {
+      document.getElementById(id).value = value || ''
+    },
+    initMath(id, value) {
+      document.getElementById(id).value = value || ''
+      const mathId = 'math' + this.capitalize(id)
+      const mathElement = document.getElementById(mathId)
+      mathElement.textContent = value || ''
+      mathElement.classList.add('text-break')
+      this.render(mathId)
+    },
+    inputMath(event) {
+      const mathId = 'math' + this.capitalize(event.target.id)
+      document.getElementById(mathId).textContent = event.target.value
+      this.render(mathId)
+    },
+    capitalize(str) {
+      return str.charAt(0).toUpperCase() + str.slice(1)
+    },
+    formatField(field) {
       if (field === 'REAL') {
-        return 'Real numbers only';
+        return 'Real numbers only'
       } else if (field === 'COMPLEX') {
-        return 'Complex numbers only';
+        return 'Complex numbers only'
       } else if (field === 'REAL_OR_COMPLEX') {
-        return 'Real or complex numbers';
+        return 'Real or complex numbers'
       } else {
-        return '';
+        return ''
       }
     },
-    formatFieldLink: function(fieldLink) {
+    formatFieldLink(fieldLink) {
       if (fieldLink === 'REAL') {
-        return 'Real';
+        return 'Real'
       } else if (fieldLink === 'COMPLEX') {
-        return 'Complex';
+        return 'Complex'
       } else if (fieldLink === 'REAL_AND_COMPLEX') {
-        return 'Real and complex';
+        return 'Real and complex'
       } else if (fieldLink === 'NOT_REAL') {
-        return 'Not real';
+        return 'Not real'
       } else if (fieldLink === 'NOT_COMPLEX') {
-        return 'Not complex';
+        return 'Not complex'
       } else if (fieldLink === 'NOT_REAL_AND_NOT_COMPLEX') {
-        return 'Not real and not complex';
+        return 'Not real and not complex'
       } else if (fieldLink === 'REAL_AND_NOT_COMPLEX') {
-        return 'Real and not complex';
+        return 'Real and not complex'
       } else if (fieldLink === 'NOT_REAL_AND_COMPLEX') {
-        return 'Complex and not real';
-      }
-    },
-    formatFieldLinkHash: function(fieldLink) {
-      if (fieldLink === 'REAL') {
-        return 'Real';
-      } else if (fieldLink === 'COMPLEX') {
-        return 'Complex';
-      } else if (fieldLink === 'REAL_AND_COMPLEX') {
-        return 'Real_and_complex';
-      } else if (fieldLink === 'NOT_REAL') {
-        return 'Not_real';
-      } else if (fieldLink === 'NOT_COMPLEX') {
-        return 'Not_complex';
-      } else if (fieldLink === 'NOT_REAL_AND_NOT_COMPLEX') {
-        return 'Not_real_and_not_complex';
-      } else if (fieldLink === 'REAL_AND_NOT_COMPLEX') {
-        return 'Real_and_not_complex';
-      } else if (fieldLink === 'NOT_REAL_AND_COMPLEX') {
-        return 'Complex_and_not_real';
-      }
-    },
-    hasProperty: function(field) {
-      if (field === 'REAL' || field === 'COMPLEX' || field === 'REAL_AND_COMPLEX') {
-        return true;
+        return 'Complex and not real'
       } else {
-        return false;
+        return ''
       }
     },
-    updatePrivileges: function() {
-      this.privileges.canEdit = this.$jsCookie.get('canEdit') === 'true';
-      this.privileges.isAdmin = this.$jsCookie.get('isAdmin') === 'true';
+    updatePrivileges() {
+      this.privileges.canEdit = this.jsCookie.get('canEdit') === 'true'
+      this.privileges.isAdmin = this.jsCookie.get('isAdmin') === 'true'
     },
-    updateSettings: function() {
-      this.settings.showSource = this.$jsCookie.get('showSource') === 'true';
+    updateSettings() {
+      this.settings.showSource = this.jsCookie.get('showSource') === 'true'
+    },
+    post(url, json) {
+      const data = {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': this.jsCookie.get('csrf')
+        }
+      }
+      if (json !== undefined) {
+        data.body = JSON.stringify(json)
+      }
+      return fetch(url, data)
+    },
+    delete(url) {
+      return fetch(url, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'X-CSRF-TOKEN': this.jsCookie.get('csrf')
+        }
+      })
     }
   },
   computed: {
-    canEdit: function() {
-      return this.privileges.canEdit;
+    canEdit() {
+      return this.privileges.canEdit
     },
-    isAdmin: function() {
-      return this.privileges.isAdmin;
+    isAdmin() {
+      return this.privileges.isAdmin
     },
-    showSource: function() {
-      return this.settings.showSource;
+    showSource() {
+      return this.settings.showSource
     }
   }
-});
+}
 
-new Vue({
-  router,
-  render: h => h(App)
-}).$mount('#app');
+document.addEventListener('hide.bs.modal', () => {
+  if (document.activeElement) {
+    document.activeElement.blur()
+  }
+})
+
+const app = createApp(App)
+
+app.use(router).mixin(globalMixin).mount('#app')
