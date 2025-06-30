@@ -1,73 +1,76 @@
 <template>
-  <div class="modal fade" id="signupModal" tabindex="-1" role="dialog">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+  <div id="signupModal" class="modal fade" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Sign up</h5>
-          <button type="button" class="close" data-dismiss="modal">
-            <span>&times;</span>
-          </button>
+          <button class="btn-close" data-bs-dismiss="modal"></button>
         </div>
         <div class="modal-body">
           <form
-            @submit.prevent
             id="signupForm"
+            autocapitalize="off"
             autocomplete="off"
             autocorrect="off"
-            autocapitalize="off"
             spellcheck="false"
+            @submit.prevent
           >
-            <div class="form-group mt-2">
-              <label for="email">Email</label>
+            <div class="mt-2">
+              <label for="emailSignup" class="form-label">Email</label>
               <input
-                class="form-control"
+                id="emailSignup"
                 name="email"
                 placeholder="Your email"
+                autocomplete="off"
+                class="form-control"
                 :class="{ 'is-invalid': errors['email'] }"
               />
-              <div class="invalid-feedback">{{errors["email"]}}</div>
+              <div class="invalid-feedback">{{ errors['email'] }}</div>
             </div>
-            <div class="form-group mt-4">
-              <label for="password">Password</label>
+            <div class="mt-4">
+              <label for="passwordSignup" class="form-label">Password</label>
               <input
-                type="password"
-                class="form-control"
+                id="passwordSignup"
                 name="password"
+                type="password"
                 placeholder="Password for login"
+                autocomplete="off"
+                class="form-control"
                 :class="{ 'is-invalid': errors['password'] }"
               />
-              <div class="invalid-feedback">{{errors["password"]}}</div>
+              <div class="invalid-feedback">{{ errors['password'] }}</div>
             </div>
-            <div class="form-group mt-4">
-              <label for="inviteCode">Invite code</label>
+            <div class="mt-4">
+              <label for="inviteCode" class="form-label">Invite code</label>
               <input
-                class="form-control"
+                id="inviteCode"
                 name="inviteCode"
                 placeholder="Invite code"
+                class="form-control"
                 :class="{ 'is-invalid': errors['inviteCode'] }"
               />
-              <div class="invalid-feedback">{{errors["inviteCode"]}}</div>
+              <div class="invalid-feedback">{{ errors['inviteCode'] }}</div>
             </div>
             <div class="form-check mt-4">
               <input
-                type="checkbox"
-                class="form-check-input"
                 id="license"
                 name="license"
+                type="checkbox"
+                class="form-check-input"
                 value="true"
                 :class="{ 'is-invalid': errors['license'] }"
               />
-              <label
-                class="form-check-label"
-                for="license"
-              >I agree that my contributions can be published under a yet to be determined open source license.</label>
-              <div class="invalid-feedback">{{errors["license"]}}</div>
+              <label class="form-check-label no-select pointer" for="license"
+                >I agree that my contributions can be published under one or more yet to be
+                determined open source licenses.</label
+              >
+              <div class="invalid-feedback">{{ errors['license'] }}</div>
             </div>
           </form>
         </div>
         <div class="modal-footer">
-          <button @click="submitSignup" type="button" class="btn btn-primary mr-auto">Sign up</button>
-          <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+          <button class="btn btn-primary me-auto" @click="submitSignup">Sign up</button>
+          <button class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
         </div>
       </div>
     </div>
@@ -76,42 +79,35 @@
 
 <script>
 export default {
-  name: "SignupModal",
-  data: function() {
+  data() {
     return {
       errors: {}
-    };
-  },
-  methods: {
-    submitSignup: function() {
-      if (this.$jsCookie.get("csrf") === undefined) {
-        this.$http.get("/api/space").then(() => {
-          this.signup();
-        });
-      } else {
-        this.signup();
-      }
-    },
-    signup: function() {
-      let form = $("#signupForm");
-      let json = this.convertFormToJson(form);
-      this.errors = {};
-      this.$http
-        .post("/api/user/signup", json)
-        .then(() => {
-          this.updatePrivileges();
-          $("#signupModal").modal("hide");
-        })
-        .catch(error => {
-          this.errors = error.response.data.errors;
-        });
     }
   },
   mounted() {
-    let self = this;
-    $("#signupModal").on("hidden.bs.modal", function() {
-      self.errors = {};
-    });
+    document.getElementById('signupModal').addEventListener('hidden.bs.modal', () => {
+      document.getElementById('passwordSignup').value = ''
+      this.errors = {}
+    })
+  },
+  methods: {
+    async submitSignup() {
+      if (this.jsCookie.get('csrf') === undefined) {
+        await fetch('/api/space')
+      }
+      const json = this.convertFormToJson('signupForm')
+      this.errors = {}
+      const response = await this.post('/api/user/signup', json)
+      if (response.status === 200) {
+        setTimeout(() => {
+          document.getElementById('signupForm').reset()
+        }, 100)
+        this.updatePrivileges()
+        Modal.getInstance(document.getElementById('signupModal')).hide()
+      } else if (response.status === 400) {
+        this.errors = (await response.json()).errors || {}
+      }
+    }
   }
-};
+}
 </script>

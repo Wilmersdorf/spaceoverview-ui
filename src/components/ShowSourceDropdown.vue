@@ -1,47 +1,43 @@
 <template>
-  <li class="ml-auto" style="margin-right:-6px">
-    <i
-      class="pointer"
-      data-toggle="dropdown"
-      data-feather="more-vertical"
-      width="20"
-      height="20"
-      color="black"
-    ></i>
-    <div id="dropdownMenu" class="dropdown-menu dropdown-menu-right mt-2">
-      <h6 class="dropdown-header no-select">Options</h6>
-      <label class="no-select ml-4 mt-2 pointer">
+  <li class="ms-auto me-nav">
+    <More class="pointer icon" data-bs-toggle="dropdown" width="20" height="20" />
+    <ul id="dropdownMenu" class="dropdown-menu dropdown-menu-end mt-2">
+      <li><h6 class="dropdown-header no-select">Options</h6></li>
+      <li class="form-check ms-3">
         <input
           id="showSource"
           :checked="showSource"
-          class="checkbox"
+          class="form-check-input pointer"
           type="checkbox"
           @change="toggleShowSource"
         />
-        <span style="margin-left:8px">Show source</span>
-      </label>
-    </div>
+        <label for="showSource" class="form-check-label no-select pointer">Show source</label>
+      </li>
+    </ul>
   </li>
 </template>
 
 <script>
+import More from '@/icons/More.vue'
+
 export default {
-  name: "ShowSourceDropdown",
-  methods: {
-    toggleShowSource: function() {
-      if ($("#showSource").is(":checked")) {
-        this.$jsCookie.set("showSource", true, { expires: 30 });
-      } else {
-        this.$jsCookie.remove("showSource");
-      }
-      this.updateSettings();
-    }
+  components: {
+    More
   },
-  mounted: function() {
-    this.$feather.replace();
-    $("#dropdownMenu").click(function(e) {
-      e.stopPropagation();
-    });
+  mounted() {
+    document.getElementById('dropdownMenu').addEventListener('click', event => {
+      event.stopPropagation()
+    })
+  },
+  methods: {
+    toggleShowSource() {
+      if (document.getElementById('showSource').checked) {
+        this.jsCookie.set('showSource', 'true')
+      } else {
+        this.jsCookie.set('showSource', 'false')
+      }
+      this.updateSettings()
+    }
   }
-};
+}
 </script>

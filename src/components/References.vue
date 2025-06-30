@@ -1,21 +1,11 @@
 <template>
-  <div v-show="rendered">
+  <div>
     <div v-if="hasReferences">
-      <h6 class="mt-4" :class="center ? 'text-center' : ''">{{title}}</h6>
-      <div
-        class="mt-2"
-        :class="center ? 'text-center' : ''"
-        v-for="(reference,index) in references"
-        :key="`${index}`"
-      >
-        <a
-          class="d-inline"
-          :id="`reference-${id}-${index}`"
-          :href="reference.url"
-          target="_blank"
-        >{{reference.title}}</a>
-        <div class="d-inline" v-if="reference.page">, page {{reference.page}}</div>
-        <div class="d-inline" v-if="reference.statement">, {{reference.statement}}</div>
+      <h6 class="mt-4">{{ title }}</h6>
+      <div v-for="(item, index) in references" :key="index" class="mt-2">
+        <a :href="item.url" target="_blank" class="math d-inline">{{ item.title }}</a>
+        <div v-if="item.page !== null" class="d-inline text-break">, page {{ item.page }}</div>
+        <div v-if="item.statement" class="d-inline text-break">, {{ item.statement }}</div>
       </div>
     </div>
   </div>
@@ -23,42 +13,25 @@
 
 <script>
 export default {
-  name: "References",
   props: {
-    id: null,
-    references: Array,
-    center: {
-      default: true
-    }
-  },
-  data: function() {
-    return {
-      rendered: false
-    };
+    references: Array
   },
   computed: {
-    hasReferences: function() {
-      return this.references !== null && this.references.length > 0;
+    hasReferences() {
+      return this.references !== null && this.references.length > 0
     },
-    title: function() {
-      if (this.references === null || this.references.length === 0) {
-        return null;
-      } else if (this.references.length === 1) {
-        return "Reference";
+    title() {
+      if (this.references.length === 1) {
+        return 'Reference'
       } else {
-        return "References";
+        return 'References'
       }
     }
   },
-  mounted: function() {
+  mounted() {
     if (this.hasReferences) {
-      this.$nextTick(() => {
-        for (let i = 0; i < this.references.length; i++) {
-          this.render(`reference-${this.id}-${i}`);
-        }
-        this.rendered = true;
-      });
+      this.renderMathNow()
     }
   }
-};
+}
 </script>
