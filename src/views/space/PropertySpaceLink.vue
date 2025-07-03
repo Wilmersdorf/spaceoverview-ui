@@ -34,7 +34,7 @@
         <div>{{ formatFieldLink(field) }}</div>
         <div v-if="link === null" class="ms-1">(computed)</div>
       </h4>
-      <div v-if="link !== null && link.description" class="mt-3 text-center math">
+      <div v-if="link !== null && link.description" class="mt-3 text-center math display">
         {{ link.description }}
       </div>
       <References v-if="link" :references="link.references"></References>

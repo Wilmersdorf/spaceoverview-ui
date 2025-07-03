@@ -1,3 +1,4 @@
+import autosize from 'autosize'
 import { Modal } from 'bootstrap'
 window.Modal = Modal
 import 'bootstrap/dist/css/bootstrap.min.css'
@@ -33,9 +34,19 @@ const fieldLinks = [
 ]
 
 const renderMathElement = element => {
-  renderMathInElement(element, {
-    delimiters: [{ left: '$', right: '$', display: false }]
-  })
+  const display = element.classList.contains('display')
+  if (display) {
+    renderMathInElement(element, {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false }
+      ]
+    })
+  } else {
+    renderMathInElement(element, {
+      delimiters: [{ left: '$', right: '$', display: false }]
+    })
+  }
 }
 
 const globalMixin = {
@@ -83,12 +94,21 @@ const globalMixin = {
     init(id, value) {
       document.getElementById(id).value = value || ''
     },
-    initMath(id, value) {
-      document.getElementById(id).value = value || ''
+    initMath(id, display, value) {
+      const input = document.getElementById(id)
+      input.style.maxHeight = '400px'
+      autosize(input)
+      input.value = value || ''
+      setTimeout(() => {
+        autosize.update(input)
+      }, 0)
       const mathId = 'math' + this.capitalize(id)
       const mathElement = document.getElementById(mathId)
       mathElement.textContent = value || ''
       mathElement.classList.add('text-break')
+      if (display) {
+        mathElement.classList.add('display')
+      }
       this.render(mathId)
     },
     inputMath(event) {

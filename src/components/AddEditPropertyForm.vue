@@ -23,10 +23,11 @@
     <div id="mathName" class="mt-2"></div>
     <div class="mt-4">
       <label for="description" class="form-label">Description</label>
-      <input
+      <textarea
         id="description"
         name="description"
         placeholder="Description"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['description'] }"
         @input="inputMath"
@@ -53,8 +54,8 @@ export default {
   },
   mounted() {
     this.init('fieldSelect', this.property.field)
-    this.initMath('name', this.property.name)
-    this.initMath('description', this.property.description)
+    this.initMath('name', false, this.property.name)
+    this.initMath('description', true, this.property.description)
   }
 }
 </script>

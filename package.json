@@ -11,6 +11,7 @@
   "dependencies": {
     "@citation-js/core": "0.7.18",
     "@citation-js/plugin-bibtex": "0.7.18",
+    "autosize": "6.0.1",
     "bootstrap": "5.3.3",
     "js-cookie": "3.0.5",
     "katex": "0.16.22",

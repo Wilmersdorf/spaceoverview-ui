@@ -23,10 +23,11 @@
     <div id="mathName" class="mt-2"></div>
     <div class="mt-4">
       <label for="symbol" class="form-label">Equation</label>
-      <input
+      <textarea
         id="symbol"
         name="symbol"
         placeholder="Equation"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['symbol'] }"
         @input="inputMath"
@@ -36,10 +37,11 @@
     <div id="mathSymbol" class="mt-2"></div>
     <div class="mt-4">
       <label for="variables" class="form-label">Variables</label>
-      <input
+      <textarea
         id="variables"
         name="variables"
         placeholder="Variables"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['variables'] }"
         @input="inputMath"
@@ -49,10 +51,11 @@
     <div id="mathVariables" class="mt-2"></div>
     <div class="mt-4">
       <label for="parameters" class="form-label">Parameters</label>
-      <input
+      <textarea
         id="parameters"
         name="parameters"
         placeholder="Parameters"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['parameters'] }"
         @input="inputMath"
@@ -62,10 +65,11 @@
     <div id="mathParameters" class="mt-2"></div>
     <div class="mt-4">
       <label for="description" class="form-label">Description</label>
-      <input
+      <textarea
         id="description"
         name="description"
         placeholder="Description"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['description'] }"
         @input="inputMath"
@@ -83,11 +87,11 @@ export default {
     errors: Object
   },
   mounted() {
-    this.initMath('name', this.differentialEquation.name)
-    this.initMath('symbol', this.differentialEquation.symbol)
-    this.initMath('variables', this.differentialEquation.variables)
-    this.initMath('parameters', this.differentialEquation.parameters)
-    this.initMath('description', this.differentialEquation.description)
+    this.initMath('name', false, this.differentialEquation.name)
+    this.initMath('symbol', true, this.differentialEquation.symbol)
+    this.initMath('variables', true, this.differentialEquation.variables)
+    this.initMath('parameters', true, this.differentialEquation.parameters)
+    this.initMath('description', true, this.differentialEquation.description)
   }
 }
 </script>

@@ -6,7 +6,7 @@
     <div v-if="!info && theorem.name !== null" class="mt-3 math">
       {{ theoremName }}
     </div>
-    <div v-if="info" class="mt-2 text-center math">{{ theorem.description }}</div>
+    <div v-if="info" class="mt-2 text-center math display">{{ theorem.description }}</div>
     <div class="d-flex flex-column" :class="{ 'align-items-center': info }">
       <div>
         <div v-for="condition in theorem.conditions" :key="condition.id" class="d-flex mt-2">

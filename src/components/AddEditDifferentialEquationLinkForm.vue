@@ -23,10 +23,11 @@
     </div>
     <div class="mt-4">
       <label for="description" class="form-label">Description (optional)</label>
-      <input
+      <textarea
         id="description"
         name="description"
         placeholder="Explanation of why this differential equation has or lacks this property"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['description'] }"
         @input="inputMath"
@@ -50,7 +51,7 @@ export default {
   },
   mounted() {
     this.init('hasProperty', `${this.link.hasProperty}`)
-    this.initMath('description', this.link.description)
+    this.initMath('description', true, this.link.description)
   },
   methods: {
     formatOption(option) {

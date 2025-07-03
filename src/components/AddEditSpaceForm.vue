@@ -22,10 +22,11 @@
     <div id="mathSymbol" class="mt-2"></div>
     <div class="mt-4">
       <label for="norm" class="form-label">Norm</label>
-      <input
+      <textarea
         id="norm"
         name="norm"
         placeholder="Norm"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['norm'] }"
         @input="inputMath"
@@ -35,10 +36,11 @@
     <div id="mathNorm" class="mt-2"></div>
     <div class="mt-4">
       <label for="description" class="form-label">Description</label>
-      <input
+      <textarea
         id="description"
         name="description"
         placeholder="Description"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['description'] }"
         @input="inputMath"
@@ -65,9 +67,9 @@ export default {
   },
   mounted() {
     this.init('fieldSelect', this.space.field)
-    this.initMath('symbol', this.space.symbol)
-    this.initMath('norm', this.space.norm)
-    this.initMath('description', this.space.description)
+    this.initMath('symbol', false, this.space.symbol)
+    this.initMath('norm', true, this.space.norm)
+    this.initMath('description', true, this.space.description)
   }
 }
 </script>

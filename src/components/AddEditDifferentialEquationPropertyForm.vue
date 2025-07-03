@@ -23,11 +23,12 @@
     <div id="mathName" class="mt-2"></div>
     <div class="mt-4">
       <label for="description" class="form-label">Description</label>
-      <input
+      <textarea
         id="description"
         name="description"
         placeholder="Description"
         class="form-control"
+        rows="1"
         :class="{ 'is-invalid': errors['description'] }"
         @input="inputMath"
       />
@@ -44,8 +45,8 @@ export default {
     errors: Object
   },
   mounted() {
-    this.initMath('name', this.property.name)
-    this.initMath('description', this.property.description)
+    this.initMath('name', false, this.property.name)
+    this.initMath('description', true, this.property.description)
   }
 }
 </script>

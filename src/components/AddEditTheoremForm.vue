@@ -24,10 +24,11 @@
       <div id="mathName" class="mt-2"></div>
       <div class="mt-4">
         <label for="description" class="form-label">Description (optional)</label>
-        <input
+        <textarea
           id="description"
           name="description"
           placeholder="Description"
+          rows="1"
           class="form-control"
           :class="{ 'is-invalid': errors['description'] }"
           @input="inputMath"
@@ -174,8 +175,8 @@ export default {
       this.conditions = this.clone(this.theorem.conditions)
       this.conclusions = this.clone(this.theorem.conclusions)
     }
-    this.initMath('name', this.theorem.name)
-    this.initMath('description', this.theorem.description)
+    this.initMath('name', false, this.theorem.name)
+    this.initMath('description', true, this.theorem.description)
     this.renderMath()
   },
   methods: {

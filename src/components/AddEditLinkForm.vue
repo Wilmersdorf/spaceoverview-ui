@@ -23,10 +23,11 @@
     </div>
     <div class="mt-4">
       <label for="description" class="form-label">Description (optional)</label>
-      <input
+      <textarea
         id="description"
         name="description"
         placeholder="Explanation of why this space has or lacks this property"
+        rows="1"
         class="form-control"
         :class="{ 'is-invalid': errors['description'] }"
         @input="inputMath"
@@ -80,7 +81,7 @@ export default {
   },
   mounted() {
     this.init('fieldSelect', this.link.field)
-    this.initMath('description', this.link.description)
+    this.initMath('description', true, this.link.description)
   }
 }
 </script>

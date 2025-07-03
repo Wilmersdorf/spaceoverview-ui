@@ -10,11 +10,18 @@
       <h3 class="text-center mt-4">Math mode</h3>
       <h5 class="fw-bold">How can I write in math mode?</h5>
       <div>
-        Everything enclosed in dollar signs $ ... $ will be rendered in math mode. For example,
-        $L^1$ will be rendered as
+        Everything enclosed in dollar signs $ .. $ will be rendered in math mode. For example, $L^1$
+        will be rendered as
         <div class="d-inline math">$L^1$</div>
         <div class="d-inline">.</div>
-        <br />A complete list, sorted into logical groups, can be found
+        <div class="mt-2"></div>
+        Everything enclosed in double dollar signs $$ .. $$ will be rendered in display mode. For
+        example, $$L^1$$ will be rendered as
+        <div class="math display">$$L^1$$</div>
+        <div class="mt-2"></div>
+        Note: The name of a space, differential equation etc. can contain $ .. $ but not $$ .. $$
+        <div class="mt-2"></div>
+        A complete list, sorted into logical groups, can be found
         <a href="https://katex.org/docs/supported.html" target="_blank">here</a>. <br />A complete
         list, sorted alphabetically, can be found
         <a href="https://katex.org/docs/support_table.html" target="_blank">here</a>. <br />If you

@@ -209,4 +209,7 @@ nav {
 .me-nav {
   margin-right: -6px;
 }
+textarea {
+  overflow-x: hidden !important;
+}
 </style>
